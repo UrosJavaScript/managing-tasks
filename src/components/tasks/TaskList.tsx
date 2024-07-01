@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { images } from "../../layout/assets";
 import Button from "../../common/button";
 import Modal from "../../common/modal/Modal";
 import { TaskListProps } from "./Tasks.types";
 import useTasks from "./useTask";
 import EditTask from "./EditTask";
+import { useState } from "react";
 import { TaskPriority } from "../../context/AuthContext.types";
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
@@ -19,6 +19,13 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     isModalOpenEdit,
   } = useTasks();
 
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
+  const openEditModal = (taskId: string) => {
+    setSelectedTaskId(taskId);
+    openEditTaskModal(taskId);
+  };
+
   if (tasks.length === 0) {
     return (
       <div className="bg-primaryBg w-full flex flex-col justify-center items-center">
@@ -30,6 +37,8 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
       </div>
     );
   }
+
+ 
 
   return (
     <>
@@ -69,7 +78,10 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
                 </span>
                 <div className="flex items-center gap-2">
                   <Button
-                    onClick={() => openEditTaskModal(task.id)}
+                    onClick={() => {
+                      openEditModal(task.id);
+                      console.log("Clicked Edit for task ID:", task.id);
+                    }}
                     iconSrc={images.editIcon}
                     iconAlt="edit icon"
                     className="bg-secondaryLightGray rounded-lg	p-[6px]"
@@ -95,30 +107,28 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
         title="Edit Task"
         mode="edit"
         onConfirm={() => {
-          console.log("onClose={closeModal}");
+          console.log("Edit Task confirmed");
         }}
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         content={
           <EditTask
-            onSubmit={function (
-              _title: string,
-              _description: string,
-              _priority: TaskPriority
-            ): void {
-              throw new Error("Function not implemented.");
+            formData={
+              selectedTaskId
+                ? tasks.find((task) => task.id === selectedTaskId) ?? {
+                    title: "",
+                    description: "",
+                    priority: TaskPriority.Low,
+                  }
+                : {
+                    title: "",
+                    description: "",
+                    priority: TaskPriority.Low,
+                  }
+            }
+            onFormChange={(name, value) => {
+              console.log("Form changed:", name, value);
             }}
-            formData={{
-              title: "",
-              description: "",
-              priority: TaskPriority.High,
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            }}
-            onFormChange={function (
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              _name: string,
-              _value: string | TaskPriority
-            ): void {
-              throw new Error("Function not implemented.");
+            onSubmit={(title, description) => {
+              console.log("Form submitted with:", title, description);
             }}
           />
         }

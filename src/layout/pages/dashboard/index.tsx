@@ -81,11 +81,7 @@ const Dashboard: React.FC = () => {
                   />
                 </>
               ) : (
-                <TaskList
-                  tasks={filteredTasks}
-                  editTask={handleLogout}
-                  deleteTask={handleLogout}
-                />
+                <TaskList tasks={filteredTasks} />
               )}
             </div>
           )}

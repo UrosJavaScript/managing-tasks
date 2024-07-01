@@ -2,8 +2,6 @@ import { Task, TaskPriority } from "../../context/AuthContext.types";
 
 export interface TaskListProps {
   tasks: Task[];
-  editTask: () => void;
-  deleteTask?: () => void;
 }
 
 export interface CreateTaskProps {
@@ -13,6 +11,7 @@ export interface CreateTaskProps {
     priority: TaskPriority
   ) => void;
   formData: {
+    done?: string | boolean;
     title: string;
     description: string;
     priority: TaskPriority;
