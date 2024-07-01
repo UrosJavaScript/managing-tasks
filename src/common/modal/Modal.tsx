@@ -10,6 +10,7 @@ const Modal: React.FC<ModalProps> = ({
   onClose,
   onConfirm,
   mode,
+  confirmDisabled = false,
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -61,7 +62,8 @@ const Modal: React.FC<ModalProps> = ({
           }
           className={`${
             mode === "delete" ? "bg-colorRed" : "bg-primaryBlue"
-          }  text-white px-4 py-2 rounded-xl font-bold w-full hover:bg-violet-600 ease-in-out duration-500`}
+          }  text-white px-4 py-2 rounded-xl font-bold w-full hover:bg-violet-600 ease-in-out duration-500 ${confirmDisabled && 'opacity-35'}`}
+          disabled={confirmDisabled}
         />
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-primaryBlue text-4xl"

@@ -5,7 +5,7 @@ export interface TaskListProps {
 }
 
 export interface CreateTaskProps {
-  onSubmit: (
+  onSubmit?: (
     title: string,
     description: string,
     priority: TaskPriority
@@ -18,4 +18,20 @@ export interface CreateTaskProps {
   };
   onFormChange: (name: string, value: string | TaskPriority) => void;
   isLoading?: boolean;
+}
+
+export interface StatusTaskProps {
+  selectedStatus: boolean | undefined;
+  onStatusChange: (status: boolean) => void;
+}
+
+export interface EditTaskProps {
+  formData: {
+    id: string;
+    title: string;
+    description: string;
+    priority: TaskPriority;
+    done?: boolean;
+  };
+  onFormChange: <T>(name: string, value: T) => void;
 }

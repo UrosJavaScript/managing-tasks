@@ -150,3 +150,29 @@ export const apiDeleteTask = async (id: string): Promise<void> => {
     throw error;
   }
 };
+
+export const apiUpdateTask = async (
+  id: string,
+  updatedTask: Partial<Task>
+): Promise<Task> => {
+  try {
+    const token = localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth")!).accessToken
+      : null;
+
+    const response = await axios.patch<Task>(
+      `${API_BASE_URL}/tasks/${id}`,
+      updatedTask,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.log("Error updating task:", error);
+    throw error;
+  }
+};

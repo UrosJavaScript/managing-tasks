@@ -1,46 +1,34 @@
 import React from "react";
 import FormInput from "../../common/formInput";
 import FilterTask from "./FilterTask";
-import { CreateTaskProps } from "./Tasks.types";
 import StatusTask from "./StatusTask";
+import { EditTaskProps } from "./Tasks.types";
 
-const EditTask: React.FC<CreateTaskProps> = ({ formData, onFormChange }) => {
-
-
-  // console.log("tasks--EditTask: ", tasks);
-  console.log("formData-EditTask: ", formData.done);
-
-
-  const selectedStatus = Boolean(formData.done);
+const EditTask: React.FC<EditTaskProps> = ({ formData, onFormChange }) => {
+  const { title, description, priority, done } = formData;
 
   const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = event.target;
+    const { name, value } = e.target;
     onFormChange(name, value);
   };
 
   const handleStatusChange = (status: boolean) => {
-    const statusString = status ? "true" : "false";
-    onFormChange("done", statusString);
+    onFormChange("done", status);
   };
-
-
 
   return (
     <form>
       <h3 className="pt-6 text-colorDark text-base font-bold">Status</h3>
-      <StatusTask
-        selectedStatus={selectedStatus}
-        onStatusChange={handleStatusChange}
-      />
+      <StatusTask selectedStatus={done} onStatusChange={handleStatusChange} />
 
       <div className="my-6">
         <FormInput
           label="Task title"
           type="text"
           name="title"
-          value={formData.title}
+          value={title}
           onChange={handleInputChange}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-[#292929] focus:outline-none" // Add your custom styles here
         />
@@ -50,9 +38,9 @@ const EditTask: React.FC<CreateTaskProps> = ({ formData, onFormChange }) => {
           label="Description"
           type="textarea"
           name="description"
-          value={formData.description}
+          value={description}
           onChange={handleInputChange}
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-[#292929] focus:outline-none" // Add your custom styles here
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-[#292929] focus:outline-none"
         />
       </div>
       <div className="mb-4">
@@ -60,6 +48,7 @@ const EditTask: React.FC<CreateTaskProps> = ({ formData, onFormChange }) => {
           Priority
         </span>
         <FilterTask
+          selectedPriority={priority}
           onSelectPriority={(value) => onFormChange("priority", value)}
         />
       </div>

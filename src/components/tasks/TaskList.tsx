@@ -4,8 +4,6 @@ import Modal from "../../common/modal/Modal";
 import { TaskListProps } from "./Tasks.types";
 import useTasks from "./useTask";
 import EditTask from "./EditTask";
-import { useState } from "react";
-import { TaskPriority } from "../../context/AuthContext.types";
 
 const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
   const {
@@ -17,14 +15,11 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
     openEditTaskModal,
     closeEditModal,
     isModalOpenEdit,
-  } = useTasks();
-
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-
-  const openEditModal = (taskId: string) => {
-    setSelectedTaskId(taskId);
-    openEditTaskModal(taskId);
-  };
+    handleUpdateTask,
+    formData,
+    setFormData,
+    isFormDataChanged,
+  } = useTasks(tasks);
 
   if (tasks.length === 0) {
     return (
@@ -37,8 +32,6 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
       </div>
     );
   }
-
- 
 
   return (
     <>
@@ -78,10 +71,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
                 </span>
                 <div className="flex items-center gap-2">
                   <Button
-                    onClick={() => {
-                      openEditModal(task.id);
-                      console.log("Clicked Edit for task ID:", task.id);
-                    }}
+                    onClick={() => openEditTaskModal(task.id)}
                     iconSrc={images.editIcon}
                     iconAlt="edit icon"
                     className="bg-secondaryLightGray rounded-lg	p-[6px]"
@@ -100,36 +90,22 @@ const TaskList: React.FC<TaskListProps> = ({ tasks }) => {
         ))}
       </div>
 
-      {/* Work in progress edit */}
       <Modal
         isOpen={isModalOpenEdit}
         onClose={closeEditModal}
         title="Edit Task"
         mode="edit"
-        onConfirm={() => {
-          console.log("Edit Task confirmed");
-        }}
+        onConfirm={handleUpdateTask}
+        confirmDisabled={!isFormDataChanged}
         content={
           <EditTask
-            formData={
-              selectedTaskId
-                ? tasks.find((task) => task.id === selectedTaskId) ?? {
-                    title: "",
-                    description: "",
-                    priority: TaskPriority.Low,
-                  }
-                : {
-                    title: "",
-                    description: "",
-                    priority: TaskPriority.Low,
-                  }
+            formData={formData}
+            onFormChange={(name, value) =>
+              setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+              }))
             }
-            onFormChange={(name, value) => {
-              console.log("Form changed:", name, value);
-            }}
-            onSubmit={(title, description) => {
-              console.log("Form submitted with:", title, description);
-            }}
           />
         }
       />

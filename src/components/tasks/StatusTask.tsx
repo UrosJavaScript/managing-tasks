@@ -1,10 +1,6 @@
 import React from "react";
 import FormInput from "../../common/formInput";
-
-interface StatusTaskProps {
-  selectedStatus: boolean | undefined;
-  onStatusChange: (status: boolean) => void;
-}
+import { StatusTaskProps } from "./Tasks.types";
 
 const StatusTask: React.FC<StatusTaskProps> = ({
   selectedStatus,
@@ -15,7 +11,7 @@ const StatusTask: React.FC<StatusTaskProps> = ({
     onStatusChange(value === "true");
   };
 
-  // Pretvaranje selectedStatus u boolean
+
   const isCheckedInProgress =
     selectedStatus === true || selectedStatus === undefined;
   const isCheckedDone = selectedStatus === false;

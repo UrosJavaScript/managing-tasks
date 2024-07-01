@@ -13,4 +13,5 @@ export interface ModalProps {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   selectedPriority?: TaskPriority;
+  confirmDisabled?: boolean;
 }

@@ -12,6 +12,7 @@ import {
   apiGetTasks,
   apiLogin,
   apiRegister,
+  apiUpdateTask,
 } from "../services/authService";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -183,6 +184,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const handleEditTask = async (
+    taskId: string,
+    updatedTaskData: Partial<Task>
+  ) => {
+    try {
+      const updatedTask = await apiUpdateTask(taskId, updatedTaskData);
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === updatedTask.id ? updatedTask : task
+        )
+      );
+      toast.success("Task updated successfully!");
+    } catch (error) {
+      console.log("Error updating task:", error);
+      toast.error("Failed to update task. Try again!");
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -196,6 +215,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         tasks,
         handleDeleteTask,
+        handleEditTask,
       }}
     >
       {children}
