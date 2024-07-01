@@ -18,10 +18,10 @@ const useRegister = () => {
     try {
       await handleRegister(email, password);
       navigate("/");
-      return true; // Ako handleRegister uspešno završi, vraćamo true
+      return true;
     } catch (error) {
-      console.error("Error in executeRegister:", error);
-      return false; // Ako dođe do greške pri registraciji, vraćamo false
+      console.log("Error in executeRegister:", error);
+      return false;
     }
   };
 

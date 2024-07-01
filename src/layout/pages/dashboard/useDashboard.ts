@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useAuth from "../../../context/useAuth";
+import { TaskPriority } from "../../../context/AuthContext.types";
 
 const useDashboard = () => {
   const { handleLogout, handleCreateTask, tasks, user } = useAuth();
@@ -7,6 +8,11 @@ const useDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    priority: TaskPriority.Low,
+  });
   const tasksPerPage = 6;
 
   useEffect(() => {
@@ -17,18 +23,15 @@ const useDashboard = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  // Set loading to true whenever selectedPriority changes
   useEffect(() => {
-    setLoading(true); // Set loading to true
-    // Simulate loading delay
+    setLoading(true);
     const timeout = setTimeout(() => {
       setLoading(false);
-    }, 1500); // Adjust timeout as needed
+    }, 2500);
 
     return () => clearTimeout(timeout);
-  }, [selectedPriority]);
+  }, [selectedPriority, currentPage]);
 
-  // Reset currentPage when selectedPriority or currentPage changes
   useEffect(() => {
     setCurrentPage(0);
   }, [selectedPriority]);
@@ -37,14 +40,34 @@ const useDashboard = () => {
     setCurrentPage(selectedPage.selected);
   };
 
-  // Function to open the task creation modal
   const openCreateTaskModal = () => {
     setIsModalOpen(true);
   };
 
-  // Function to close the modal
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  
+  const handleFormChange = (name: string, value: string | TaskPriority) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+ 
+  const handleSubmit = () => {
+    handleCreateTask(formData.title, formData.description, formData.priority);
+    closeModal();
+  };
+
+  const clearForm = () => {
+    setFormData({
+      title: "",
+      description: "",
+      priority: TaskPriority.Low,
+    });
   };
 
   // Filtering tasks by priority
@@ -80,7 +103,11 @@ const useDashboard = () => {
     closeModal,
     filterTasksByPriority,
     filteredTasks: paginatedFilteredTasks,
-    pageCount, // Return pageCount to be used in PaginationComponent
+    pageCount,
+    formData,
+    handleFormChange,
+    handleSubmit,
+    clearForm,
   };
 };
 

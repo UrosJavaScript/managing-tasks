@@ -1,36 +1,36 @@
 import Button from "../../../common/button";
 import LoadingSpinner from "../../../common/loadingSpiner";
-import TaskList from "../../../common/tasks/TaskList";
+import TaskList from "../../../components/tasks/TaskList";
 import PaginationComponent from "../../../components/pagination/Pagination";
-import FilterTask from "../../../components/filterTask/FilterTask";
+import FilterTask from "../../../components/tasks/FilterTask";
 import useDashboard from "./useDashboard";
-import Modal from "../../../common/modal/Modal";
-import { TaskPriority } from "../../../context/AuthContext.types";
 import { images } from "../../assets";
+import Modal from "../../../common/modal/Modal";
+
+import CreateTask from "../../../components/tasks/CreateTask";
 
 const Dashboard: React.FC = () => {
   const {
     handleLogout,
-    // user,
     tasks,
     loading,
     handlePageChange,
-    handleCreateTask,
     isModalOpen,
     openCreateTaskModal,
     closeModal,
     filterTasksByPriority,
     filteredTasks,
     pageCount,
+    handleSubmit,
+    formData,
+    handleFormChange,
+    handleCreateTask,
+    clearForm,
   } = useDashboard();
-
-  // console.log("tasks-Dashboard: ", tasks);
-  // console.log("user-Dashboard: ", user);
-  console.log("filteredTasks: ", filteredTasks);
 
   return (
     <>
-      <div className="py-4 border-b border-primaryBlue bg-white px-14 flex justify-between items-center">
+      <div className="py-4 border-b border-primaryBlue bg-white px-14 flex justify-between items-center max-md:flex-col max-md:gap-4">
         <h2 className="text-base text-colorDark font-bold">Dashboard</h2>
         {tasks.length !== 0 && (
           <Button
@@ -39,16 +39,18 @@ const Dashboard: React.FC = () => {
             className="bg-primaryBlue text-white hover:bg-lime-900 font-bold text-sm py-[10px] px-[24px] rounded-xl"
           />
         )}
-        <Button
-          onClick={handleLogout}
-          iconSrc={images.logoutIcon}
-          iconAlt="My icon"
-          className="bg-[#FC57571A] p-2 rounded-[32px]"
-        />
+        <div className="max-md:flex max-md:w-full max-md:justify-end">
+          <Button
+            onClick={handleLogout}
+            iconSrc={images.logoutIcon}
+            iconAlt="My icon"
+            className="bg-[#FC57571A] p-2 rounded-[32px]"
+          />
+        </div>
       </div>
 
       {tasks.length !== 0 && (
-        <div className="flex flex-row justify-between w-full px-14 py-4 bg-primaryBg items-center max-md:flex-col max-md:gap-4">
+        <div className="flex flex-row justify-between w-full px-14 pt-4 pb-12 bg-primaryBg items-center max-md:flex-col max-md:gap-4 ">
           <h4 className="text-base text-colorDark font-bold">Tasks</h4>
           <FilterTask onSelectPriority={filterTasksByPriority} />
         </div>
@@ -81,7 +83,6 @@ const Dashboard: React.FC = () => {
               ) : (
                 <TaskList
                   tasks={filteredTasks}
-                  handleCreateTask={handleLogout}
                   editTask={handleLogout}
                   deleteTask={handleLogout}
                 />
@@ -99,24 +100,21 @@ const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal za kreiranje zadatka */}
       <Modal
         isOpen={isModalOpen}
-        onClose={closeModal}
-        title="Create New Task"
-        mode="create"
+        title="Create Task"
+        mode={"create"}
         onConfirm={() => {
-          // Implementirajte logiku za kreiranje zadatka
-          handleCreateTask("New Task", "Description", TaskPriority.Low);
-          closeModal(); // Zatvaranje moda nakon potvrde
+          handleSubmit();
+          clearForm();
         }}
+        onClose={closeModal}
         content={
-          <div>
-            {/* Ovde možete dodati formu za unos novog zadatka */}
-            <input type="text" placeholder="Task Title" />
-            <textarea placeholder="Task Description" />
-            {/* Dodavanje prioriteta itd. */}
-          </div>
+          <CreateTask
+            onSubmit={handleCreateTask}
+            formData={formData}
+            onFormChange={handleFormChange}
+          />
         }
       />
     </>

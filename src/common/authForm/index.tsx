@@ -54,7 +54,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
             : "border-secondaryLightGray"
         }`}
         error={errors.email}
-        // absolute={{ left: "0", top: "6" }}
+        labelColor="text-primaryBlue"
       />
       <FormInput
         label="Password"
@@ -72,7 +72,8 @@ const AuthForm: React.FC<AuthFormProps> = ({
             : "border-secondaryLightGray"
         }`}
         error={errors.password}
-        // absolute={{ left: "0", top: "6" }}
+        labelColor="text-primaryBlue"
+
       />
       {error && <MessageComponent message={error} />}
       <Button

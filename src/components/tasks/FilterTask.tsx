@@ -15,7 +15,7 @@ const FilterTask: React.FC<FilterTaskProps> = ({ onSelectPriority }) => {
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 max-md:flex-wrap max-md:justify-center">
       <FormInput
         id="low"
         type="radio"
@@ -23,7 +23,7 @@ const FilterTask: React.FC<FilterTaskProps> = ({ onSelectPriority }) => {
         value="Low"
         label="Low"
         checked={selectedPriority === "Low"}
-        className="h-6 w-6 border-gray-400 peer-checked:border-primaryBlue"
+        className="!h-6 !w-6 border-gray-400 peer-checked:border-primaryBlue"
         containerClassName="flex items-center flex-row-reverse gap-3"
         labelClassBg="p-6 bg-[#2FC8501A] py-2 px-3 rounded-xl !text-[#2fc850] text-sm font-semibold peer-checked:text-primaryBlue"
         onChange={handlePriorityChange}
@@ -35,7 +35,7 @@ const FilterTask: React.FC<FilterTaskProps> = ({ onSelectPriority }) => {
         value="Medium"
         label="Medium"
         checked={selectedPriority === "Medium"}
-        className="h-6 w-6 border-gray-400 peer-checked:border-primaryBlue"
+        className="!h-6 !w-6 border-gray-400 peer-checked:border-primaryBlue"
         containerClassName="flex items-center flex-row-reverse gap-3"
         labelClassBg="p-6 bg-[#FF914226] py-2 px-3 rounded-xl !text-[#ff9142] text-sm font-semibold peer-checked:text-primaryBlue"
         onChange={handlePriorityChange}
@@ -47,7 +47,7 @@ const FilterTask: React.FC<FilterTaskProps> = ({ onSelectPriority }) => {
         value="High"
         label="High"
         checked={selectedPriority === "High"}
-        className="h-6 w-6 border-gray-400 peer-checked:border-primaryBlue"
+        className="!h-6 !w-6 border-gray-400 peer-checked:border-primaryBlue"
         containerClassName="flex items-center flex-row-reverse gap-3"
         labelClassBg="p-6 bg-[#FF424226] py-2 px-3 rounded-xl !text-[#ff4242] text-sm font-semibold peer-checked:text-primaryBlue"
         onChange={handlePriorityChange}

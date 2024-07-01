@@ -4,7 +4,7 @@ export interface FormInputProps {
   label: string;
   type: string;
   name: string;
-  value: string;
+  value?: string;
   checked?: boolean;
   onFocus?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,6 +13,7 @@ export interface FormInputProps {
   error?: string;
   containerClassName?: string;
   labelClassBg?: string;
+  labelColor?: string;
   id?: string;
 }
 

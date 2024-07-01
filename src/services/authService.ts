@@ -17,11 +17,9 @@ export const apiLogin = async (
       username,
       password,
     });
-    console.log("Successful login response:", response);
 
-    // Provera strukture odgovora
     if (response && response.data.accessToken) {
-      return response.data as AuthResponse; // Vraćanje celog odgovora
+      return response.data as AuthResponse;
     } else {
       throw new Error("Invalid response format");
     }
@@ -61,16 +59,13 @@ export const apiRegister = async (
       password,
     });
 
-    console.log("Successful registration response:", response);
-
-    // Provera statusa odgovora
     if (response && response.status === 201) {
-      return true; // Vraća se true ako je registracija uspešna
+      return true;
     } else {
       throw new Error("Unexpected status code: " + response.status);
     }
   } catch (error) {
-    console.error("Error object in apiRegister: ", error);
+    console.log("Error object in apiRegister: ", error);
 
     if (axios.isAxiosError(error)) {
       const axiosError = error as AxiosError;
@@ -108,11 +103,11 @@ export const apiGetTasks = async (): Promise<TasksResponse> => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("apiGetTasks: ", response);
+
     return response.data;
   } catch (error) {
-    console.error("Error fetching tasks:", error);
-    throw error; // Ponovno bacite grešku kako biste mogli rukovati njome u pozivatelju funkcije
+    console.log("Error fetching tasks:", error);
+    throw error;
   }
 };
 
@@ -134,7 +129,24 @@ export const apiCreateTask = async (task: {
 
     return response.data;
   } catch (error) {
-    console.error("Error creating task:", error);
-    throw error; // Ponovno bacite grešku kako biste mogli rukovati njome u pozivatelju funkcije
+    console.log("Error creating task:", error);
+    throw error;
+  }
+};
+
+export const apiDeleteTask = async (id: string): Promise<void> => {
+  try {
+    const token = localStorage.getItem("auth")
+      ? JSON.parse(localStorage.getItem("auth")!).accessToken
+      : null;
+
+    await axios.delete(`${API_BASE_URL}/tasks/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.log("Error deleting task:", error);
+    throw error;
   }
 };

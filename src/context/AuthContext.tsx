@@ -8,6 +8,7 @@ import {
 } from "./AuthContext.types";
 import {
   apiCreateTask,
+  apiDeleteTask,
   apiGetTasks,
   apiLogin,
   apiRegister,
@@ -37,12 +38,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const { user } = parsedAuth;
         setUser(user);
 
-        // Učitavanje taskova za korisnika
         fetchUserTasks();
       } catch (error) {
-        console.error("Error parsing stored auth data:", error);
-        // Handle error if JSON parsing fails, e.g., clear localStorage or set user to null
-        setUser(null); // Set user to null in case of parsing error
+        console.log("Error parsing stored auth data:", error);
+        setUser(null);
       }
     }
   }, []);
@@ -52,9 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     try {
       const response = await apiLogin(email, password);
-      console.log("Response: ", response);
 
-      // Provera strukture odgovora
       if (response && response.accessToken) {
         localStorage.setItem(
           "auth",
@@ -74,11 +71,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
         fetchUserTasks();
       } else {
-        // Ako odgovor nema očekivane podatke, tretirajte kao grešku
         throw new Error("Invalid response format");
       }
     } catch (err) {
-      console.log("Error during login:", err); // Logovanje greške
+      console.log("Error during login:", err);
       handleAuthError(err);
     } finally {
       setIsLoading(false);
@@ -91,25 +87,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const registrationSuccessful = await apiRegister(username, password);
 
-      console.log("Registration successful:", registrationSuccessful);
-
-      // Provera da li je registracija uspešna
       if (registrationSuccessful) {
-        // localStorage.setItem("auth", JSON.stringify({ user: { email } }));
         toast.success("Successfully registered!");
 
         setTimeout(() => {
           toast.success("Log in now!");
         }, 500);
 
-        // setIsAuthenticated(true);
-        return true; // Vratite true ako je registracija uspešna
+        return true;
       } else {
-        // Ako registracija nije uspešna, tretirajte kao grešku
         throw new Error("Registration unsuccessful");
       }
     } catch (err) {
-      console.log("Error during registration:", err); // Logovanje greške
+      console.log("Error during registration:", err);
       handleAuthError(err);
       return false;
     } finally {
@@ -121,14 +111,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast.success("Logout 🖐");
     setTimeout(() => {
       setIsAuthenticated(false);
-      setUser(null); // Resetuj korisnika na null pri odjavi
+      setUser(null);
       localStorage.removeItem("auth");
     }, 2000);
   };
 
   const handleAuthError = (err: unknown) => {
-    console.log("Error object: ", err);
-
     if (axios.isAxiosError(err)) {
       const axiosError = err as AxiosError;
       const status = axiosError.response?.status;
@@ -158,10 +146,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const fetchUserTasks = async () => {
     try {
       const { items: tasks } = await apiGetTasks();
-      console.log("fetchUserTasks:  ", tasks);
       setTasks(tasks);
     } catch (error) {
-      console.error("Error fetching user tasks:", error);
+      console.log("Error fetching user tasks:", error);
     }
   };
 
@@ -181,8 +168,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setTasks((prevTasks) => [...prevTasks, createdTask]);
       toast.success("Task created successfully!");
     } catch (error) {
-      console.log("Error creating task:", error);
-      toast.error("Failed to create task.");
+      toast.error("Failed to create task. Try again!");
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      await apiDeleteTask(taskId);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+      toast.success("Task deleted successfully!");
+    } catch (error) {
+      console.log("Error deleting task:", error);
+      toast.error("Failed to delete task.");
     }
   };
 
@@ -198,6 +195,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         user,
         tasks,
+        handleDeleteTask,
       }}
     >
       {children}

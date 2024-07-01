@@ -1,5 +1,5 @@
 import React from "react";
-import { Task } from "../../context/AuthContext.types";
+import { Task, TaskPriority } from "../../context/AuthContext.types";
 
 export interface ModalProps {
   title: string;
@@ -12,5 +12,5 @@ export interface ModalProps {
   handleChange?: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  handlePriorityChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedPriority?: TaskPriority;
 }

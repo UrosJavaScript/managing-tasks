@@ -15,6 +15,7 @@ export interface AuthContextProps {
   isLoading: boolean;
   user: User | null;
   tasks: Task[];
+  handleDeleteTask: (id: string) => Promise<void>;
 }
 export interface AuthResponse {
   status: number;

@@ -17,12 +17,13 @@ const FormInput: React.FC<ExtendedFormInputProps> = ({
   containerClassName,
   labelClassBg,
   id,
+  labelColor,
 }) => {
-  const inputClasses = `py-[16px] px-5 text-colorDark border rounded-xl w-full focus:outline-none ${
-    error ? "border-colorRed" : className || ""
-  } ${
+  const inputClasses = `py-[16px] px-5 text-colorDark border rounded-xl ${
+    type !== "radio" && "w-full"
+  } focus:outline-none ${error ? "border-colorRed" : className || ""} ${
     type === "radio"
-      ? "h-[23px] w-[23px] peer-checked:border-secondaryLightGray cursor-pointer"
+      ? "h-6 w-6 peer-checked:border-secondaryLightGray cursor-pointer"
       : ""
   }`;
 
@@ -31,11 +32,15 @@ const FormInput: React.FC<ExtendedFormInputProps> = ({
       ? `absolute left-${absolute.left} -top-${absolute.top}`
       : "relative"
   } ${
-    error ? "text-colorRed" : value ? "text-primaryBlue" : "hidden"
-  } ${labelClassBg}`;
+    error ? "text-colorRed" : value ? labelColor : "hidden"
+  } ${labelClassBg} `;
 
   return (
-    <div className={`relative w-full ${containerClassName || ""}`}>
+    <div
+      className={`relative ${type !== "radio" && "w-full"} ${
+        containerClassName || ""
+      }`}
+    >
       <label className={labelClasses}>{label}</label>
       <input
         id={id}

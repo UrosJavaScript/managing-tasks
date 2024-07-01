@@ -4,4 +4,5 @@ export const images = {
   logoutIcon: "/assets/images/logoutIcon.svg",
   editIcon: "/assets/images/editIcon.svg",
   deleteIcon: "/assets/images/deleteIcon.svg",
+  pencilIcon: "/assets/images/pencilIcon.svg",
 };
